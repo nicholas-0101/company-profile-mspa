@@ -2,6 +2,8 @@
 
 import React, { Suspense, useEffect, useState } from "react";
 import Tab from "../coreComponents/tab-create";
+
+export const dynamic = "force-dynamic";
 import { useAccountStore } from "@/lib/store/accountStore";
 import { useRouter } from "next/navigation";
 
