@@ -8,27 +8,27 @@ import axios from "axios";
 import { ISignUpValue, SignUpSchema } from "./SignupSchema";
 import { Formik, Form, FormikProps, FormikValues } from "formik";
 import { Input } from "@/components/ui/input";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 const SignupPage = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   // untuk menambah data user ke database
-  const onSignup = async (values: ISignUpValue) => {
+  const onSignup = async (values: ISignUpValue, { setSubmitting }: any) => {
     try {
-      const result = await axios.post(
-        "https://awesomebucket-us.backendless.app/api/data/accounts",
-        {
-          username: values.username,
-          email: values.email,
-          password: values.password,
-        }
-      );
+      setSubmitting(true);
+      await axios.post("/api/auth/signup", {
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      });
 
       router.replace("/signin");
     } catch (error) {
       console.log(error);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -51,7 +51,7 @@ const SignupPage = () => {
             onSubmit={onSignup}
           >
             {(props: FormikProps<ISignUpValue>) => {
-              const { errors, values, handleChange } = props;
+              const { errors, values, handleChange, isSubmitting } = props;
               return (
                 <Form>
                   <div>
@@ -133,9 +133,17 @@ const SignupPage = () => {
                         <Button
                           variant={"outline"}
                           type="submit"
-                          className="text-white p-2 rounded-full cursor-pointer hover:bg-[#2e2e45] hover:text-white transition-colors border-gray-300 mt-[20px] bg-[#18182b]"
+                          disabled={isSubmitting}
+                          className="text-white p-2 rounded-full cursor-pointer hover:bg-[#2e2e45] hover:text-white transition-colors border-gray-300 mt-[20px] bg-[#18182b] flex items-center justify-center gap-2"
                         >
-                          Sign Up
+                          {isSubmitting ? (
+                            <>
+                              <Loader2 className="size-4 animate-spin" />
+                              Membuat akun...
+                            </>
+                          ) : (
+                            "Daftar"
+                          )}
                         </Button>
                       </div>
                     </Card>
@@ -155,7 +163,7 @@ const SignupPage = () => {
                 variant={"link"}
                 className="text-gray-600 hover:text-grey-400 p-0 pl-1.5"
               >
-                Sign In
+                Masuk
               </Button>
             </a>
           </div>

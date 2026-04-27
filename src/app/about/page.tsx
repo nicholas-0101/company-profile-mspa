@@ -57,7 +57,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <section>
+    <section className="pb-20">
       <div className="px-4 sm:px-8 md:px-12 lg:px-20 xl:px-40 py-10 pb-13 text-center flex flex-col gap-4 items-center">
         <h1 className="text-[50px] max-w-3xl text-[#18182b] font-serif font-black">
           Kenali Kami
@@ -73,7 +73,7 @@ export default function AboutPage() {
           melalui berbagai
           <span>
             <DropdownMenu>
-              <DropdownMenuTrigger className="p-1.5 font-sans text-[#9e9e9e] text-[16px] cursor-pointer hover:underline border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0">
+              <DropdownMenuTrigger className="p-1.5 font-sans text-blue-700 font-bold cursor-pointer hover:underline border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0">
                 sertifikasi resmi
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -124,7 +124,7 @@ export default function AboutPage() {
           {team.map((member, i) => (
             <div
               key={i}
-              className="p-6 rounded-3xl border border-[#18182b77] hover:shadow-lg transition-all text-left"
+              className="p-6 rounded-3xl border border-[#18182b77] transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-[#18182b] cursor-pointer text-left"
             >
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-4">

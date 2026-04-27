@@ -1,7 +1,5 @@
 import * as Yup from "yup";
-
-import Backendless from "backendless"; // to check email has registered or not
-Backendless.initApp("624FAF5A-578D-4D43-B90A-E074169B79B5", "A629C5C9-8427-4DA5-9418-2B765EDB06F3"); // (app-id, js-api-key) -> see from the backendless -> settings
+import axios from "axios";
 
 export const SignInSchema = Yup.object().shape({
   email: Yup.string()
@@ -13,13 +11,10 @@ export const SignInSchema = Yup.object().shape({
       async (value) => {
         if (!value) return false;
         try {
-          const accounts = await Backendless.Data.of("accounts").find({
-            where: `email = '${value}'`
-          });
-
-          return accounts.length > 0; // return true if the email is found
+          const res = await axios.get(`/api/auth/check-email?email=${value}`);
+          return res.data.exists;
         } catch (error) {
-          console.error("Backendless query error:", error);
+          console.error("Query error:", error);
           return false; // fail validation on error
         }
       }

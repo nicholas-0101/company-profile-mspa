@@ -47,8 +47,8 @@ export default function manageSection() {
 
       <div className="grid grid-cols-1  gap-6">
         {filteredBlogs.map((blog) => (
-          <Link href={`/blog-detail/${blog.title}`} key={blog.objectId}>
-            <Card className="p-4 rounded-xl transition hover:shadow-lg text-left cursor-pointer">
+          <Link href={`/blog-detail/${blog.slug}`} key={blog.objectId}>
+            <Card className="p-4 rounded-3xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-[#18182b] text-left cursor-pointer">
               <div className="flex flex-col md:flex-row gap-1 md:gap-4">
                 <div className="w-full h-40 rounded-md overflow-hidden mb-3 relative md:flex-1/3 lg:flex-1/4">
                   <Image
@@ -84,7 +84,7 @@ export default function manageSection() {
                     <div className="flex flex-col items-center justify-center">
                       <Calendar className="size-3" />
                     </div>
-                    {new Date(blog.created).toLocaleDateString("id-ID")}
+                    {new Date(blog.createdAt).toLocaleDateString("id-ID")}
                   </div>
                 </div>
               </div>

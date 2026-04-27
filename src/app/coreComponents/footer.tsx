@@ -36,7 +36,7 @@ function Footer() {
 
               <div className="flex items-start gap-2">
                 <a
-                  href="https://mail.google.com/mail/u/0/?view=cm&tf=1&fs=1&to=jorsantosa@gmail.com"
+                  href="mailto:jorsantosa@gmail.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Send email to jorsantosa@gmail.com"
@@ -102,7 +102,8 @@ function Footer() {
 
       <div>
         <p className="font-sans text-[12px] text-center md:text-left">
-          Copyright © 2025 MS Putra Abadi. All Rights Reserved.
+          Copyright © {new Date().getFullYear()} MS Putra Abadi. Seluruh hak
+          cipta dilindungi.
         </p>
       </div>
     </footer>

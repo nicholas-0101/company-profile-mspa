@@ -14,7 +14,7 @@ import { ISignInValue, SignInSchema } from "./SigninSchema";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useAccountStore } from "@/lib/store/accountStore";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 export default function SignIn() {
   const router = useRouter();
@@ -22,27 +22,24 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
 
   const { setAccount } = useAccountStore();
-  const onSignin = async (values: ISignInValue) => {
+  const onSignin = async (values: ISignInValue, { setSubmitting }: any) => {
     try {
-      const result = await axios.get(
-        "https://awesomebucket-us.backendless.app/api/data/accounts",
-        {
-          params: {
-            where: `email='${values.email}' AND password='${values.password}'`,
-          },
-        }
-      );
+      setSubmitting(true);
+      const result = await axios.post("/api/auth/signin", {
+        email: values.email,
+        password: values.password,
+      });
+
       console.log(result.data);
-      if (result.data.length === 1) {
-        setAccount(result.data[0]); // menyimpan data ke global state zustand
-        localStorage.setItem("id", result.data[0].objectId); // menyimpan data id ke localStorage untuk nanti keeplogin
-        // alert(`Selamat datang, ${result.data[0].username}`);
+      if (result.data.user) {
+        setAccount(result.data.user); // menyimpan data ke global state zustand
+        localStorage.setItem("id", result.data.user.objectId); // menyimpan data id ke localStorage untuk nanti keeplogin
         router.replace("/");
-      } else {
-        // alert("Akun tidak ditemukan");
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -55,7 +52,7 @@ export default function SignIn() {
               Halo!
             </h1>
             <p className="text-center text-gray-600 dark:text-gray-400">
-              Sign in untuk menulis blog
+              Masuk untuk menulis blog
             </p>
           </div>
 
@@ -65,8 +62,7 @@ export default function SignIn() {
             onSubmit={onSignin}
           >
             {(props: FormikProps<ISignInValue>) => {
-              const { errors, values, handleChange } = props;
-              console.log(errors);
+              const { errors, values, handleChange, isSubmitting } = props;
               return (
                 <Form>
                   <div>
@@ -126,9 +122,17 @@ export default function SignIn() {
                         <Button
                           variant={"outline"}
                           type="submit"
-                          className="text-white p-2 rounded-full  hover:bg-[#2e2e45] hover:text-white transition-colors border-gray-300 mt-[20px] bg-[#18182b]"
+                          disabled={isSubmitting}
+                          className="text-white p-2 rounded-full hover:bg-[#2e2e45] hover:text-white transition-colors border-gray-300 mt-[20px] bg-[#18182b] flex items-center justify-center gap-2"
                         >
-                          Sign In
+                          {isSubmitting ? (
+                            <>
+                              <Loader2 className="size-4 animate-spin" />
+                              Masuk...
+                            </>
+                          ) : (
+                            "Masuk"
+                          )}
                         </Button>
                       </div>
                     </Card>
@@ -147,7 +151,7 @@ export default function SignIn() {
                 variant={"link"}
                 className="text-gray-600 hover:text-grey-400 p-0 pl-1.5"
               >
-                Sign Up
+                Daftar
               </Button>
             </a>
           </div>

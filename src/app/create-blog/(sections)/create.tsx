@@ -42,24 +42,11 @@ export default function createSection() {
         throw new Error("Account objectId is missing!");
       }
 
-      const result = await axios.post(
-        "https://awesomebucket-us.backendless.app/api/data/blogs",
-        values
-      );
+      await axios.post("/api/blogs", {
+        ...values,
+        accountId: account.objectId
+      });
 
-      const blogId = result.data?.objectId;
-      if (!blogId) {
-        throw new Error("Failed to retrieve blog objectId after creation.");
-      }
-
-      await axios.put(
-        `https://awesomebucket-us.backendless.app/api/data/blogs/${blogId}/account`,
-        {
-          objectIds: account.objectId,
-        }
-      );
-
-      // alert("Publish blog success");
       router.replace("/blog");
     } catch (error: any) {
       console.error(

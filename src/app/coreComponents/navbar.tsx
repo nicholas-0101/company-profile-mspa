@@ -33,17 +33,12 @@ function Navbar() {
   // keep login
   const keeplogin = async () => {
     try {
-      if (localStorage.getItem("id")) {
-        const result = await axios.get(
-          "https://awesomebucket-us.backendless.app/api/data/accounts",
-          {
-            params: {
-              where: `objectId='${localStorage.getItem("id")}'`,
-            },
-          }
-        );
-
-        setAccount(result.data[0]);
+      const id = localStorage.getItem("id");
+      if (id) {
+        const result = await axios.get(`/api/auth/me?id=${id}`);
+        if (result.data.user) {
+          setAccount(result.data.user);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -121,17 +116,17 @@ function Navbar() {
                   </Button>
 
                   {menuOpen && (
-                    <div className="absolute right-0 mt-2 w-30 bg-white border border-gray-300 rounded z-50">
+                    <div className="absolute right-0 mt-2 w-30 bg-white border border-gray-300 rounded-full z-50">
                       <Button
                         onClick={() => {
                           signOut();
                           setMenuOpen(false);
                         }}
-                        className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 hover:text-[#18182b]"
+                        className="w-full text-left rounded-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 hover:text-red-500"
                         variant="ghost"
                         aria-label="sign-out"
                       >
-                        Sign Out
+                        Keluar
                       </Button>
                     </div>
                   )}
@@ -144,7 +139,7 @@ function Navbar() {
                       aria-label="sign-in"
                       className="text-[#18182b] font-bold w-20 h-10 rounded-full bg-transparent hover:bg-[#ffffff66] px-4 py-2"
                     >
-                      Sign In
+                      Masuk
                     </Button>
                   </Link>
 
@@ -154,7 +149,7 @@ function Navbar() {
                       aria-label="sign-up"
                       className="bg-[#18182b] text-white hover:bg-[#2e2e45] hover:text-white w-20 h-10 rounded-full px-4 py-2"
                     >
-                      Sign Up
+                      Daftar
                     </Button>
                   </Link>
                 </div>
@@ -213,7 +208,7 @@ function Navbar() {
                         variant="ghost"
                         aria-label="sign-out"
                       >
-                        Sign Out
+                        Keluar
                       </Button>
                     ) : (
                       <div className="flex gap-2">
@@ -227,7 +222,7 @@ function Navbar() {
                             aria-label="sign-in"
                             className="text-[#18182b] font-bold w-full rounded-full bg-transparent hover:bg-[#ffffff66]"
                           >
-                            Sign In
+                            Masuk
                           </Button>
                         </Link>
                         <Link
@@ -240,7 +235,7 @@ function Navbar() {
                             aria-label="sign-up"
                             className="bg-[#18182b] text-white hover:bg-[#2e2e45] hover:text-white w-full rounded-full"
                           >
-                            Sign Up
+                            Daftar
                           </Button>
                         </Link>
                       </div>

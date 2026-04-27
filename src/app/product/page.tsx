@@ -100,7 +100,7 @@ export default function ProductPage() {
     return product.map((val) => (
       <Dialog key={val.id}>
         <DialogTrigger asChild>
-          <Card className="p-6 min-w-[250px] border-[#18182b77] transition hover:shadow-md rounded-3xl">
+          <Card className="p-6 min-w-[250px] border-[#18182b77] transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-[#18182b] rounded-3xl">
             <button
               type="button"
               className="w-full h-full text-left cursor-pointer flex flex-col items-center justify-center gap-2"
@@ -115,7 +115,7 @@ export default function ProductPage() {
                   className="size-full object-cover rounded-md w-40"
                 />
                 <hr className="border-[#18182b]" />
-                <h2 className="text-[16px] text-[#18182b] font-sans font-bold">
+                <h2 className="text-center text-[16px] text-[#18182b] font-sans font-bold">
                   {val.name}
                 </h2>
               </div>
@@ -128,7 +128,7 @@ export default function ProductPage() {
           className="rounded-3xl overflow-y-auto"
           id="product-dialog"
         >
-          <DialogClose className="absolute right-4 top-4 rounded-md opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-0">
+          <DialogClose className="absolute cursor-pointer right-4 top-4 rounded-md opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-0">
             <X className="h-4 w-4" />
             <span className="sr-only">Close</span>
           </DialogClose>
@@ -193,7 +193,7 @@ export default function ProductPage() {
 
   return (
     <section>
-      <div className="text-[#18182b] text-center flex flex-col justify-center gap-10 items-center min-h-screen px-4 sm:px-8 md:px-12 pb-40 py-10">
+      <div className="text-[#18182b] text-center flex flex-col justify-center gap-10 items-center min-h-screen px-4 sm:px-8 md:px-12 pb-32 py-10">
         <div>
           <h1 className="text-[50px] max-w-3xl font-serif font-black">
             Produk Kami

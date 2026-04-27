@@ -56,7 +56,7 @@ export default function HomePage() {
     return testimony.map((val) => (
       <Card
         key={val.id}
-        className="flex-1 p-6 min-w-[250px] border-[#18182b77] rounded-3xl cursor-pointer transition hover:shadow-md"
+        className="flex-1 p-6 min-w-[250px] border-[#18182b77] rounded-3xl cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-[#18182b]"
       >
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-0">
@@ -79,7 +79,7 @@ export default function HomePage() {
     return services.map((val) => (
       <Card
         key={val.id}
-        className="flex-1 p-6 min-w-[250px] bg-white border-[#18182b] border rounded-3xl cursor-pointer transition hover:shadow-md hover:shadow-[#9f9f9f]"
+        className="flex-1 p-6 min-w-[250px] bg-white border-[#18182b] border rounded-3xl cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#9f9f9f]"
       >
         <h2 className="text-[23px] p-0 text-[#18182b] font-serif font-bold">
           {val.title}
@@ -91,7 +91,7 @@ export default function HomePage() {
   };
 
   return (
-    <section>
+    <section className="pb-20">
       <div id="hero" className="relative w-full min-h-[70vh] h-screen">
         <div className="absolute inset-0 -z-10 bg-[#18182b]">
           <Image

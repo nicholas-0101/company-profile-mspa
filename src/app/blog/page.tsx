@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -8,34 +7,26 @@ import { Calendar, Filter, Pencil, Search, SearchX, User2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAccountStore } from "@/lib/store/accountStore";
-
-interface BlogPost {
-  objectId: string;
-  title: string;
-  thumbnail: string;
-  content: string;
-  categories: string;
-  created: string;
-  account: {
-    username: string;
-  };
-}
+import { useEffect } from "react";
+import axios from "axios";
+import { BlogPost } from "@/lib/store/blogStore";
 
 export default function ExploreSection() {
   const account = useAccountStore((state) => state.account);
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [search, setSearch] = useState("");
   const [showMobileFilter, setShowMobileFilter] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const result = await axios.get(
-          "https://awesomebucket-us.backendless.app/api/data/blogs?loadRelations=account"
-        );
+        const result = await axios.get("/api/blogs");
         setBlogs(result.data);
       } catch (error) {
         console.error("Failed to fetch blogs:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -64,7 +55,7 @@ export default function ExploreSection() {
   });
 
   return (
-    <section className="min-h-screen bg-white pb-25">
+    <section className="min-h-screen bg-white pb-32">
       <div className="w-full flex justify-center px-4 sm:px-6">
         <div className="text-center mt-24 w-full max-w-[1016px]">
           <div>
@@ -130,7 +121,12 @@ export default function ExploreSection() {
 
           {/* Blog Grid */}
           <div className="py-10">
-            {filteredBlogs.length === 0 ? (
+            {isLoading ? (
+              <div className="flex flex-col items-center justify-center gap-4 py-20">
+                <div className="w-12 h-12 border-4 border-gray-200 border-t-[#18182b] rounded-full animate-spin"></div>
+                <p className="text-gray-500 font-medium">Memuat blog...</p>
+              </div>
+            ) : filteredBlogs.length === 0 ? (
               <p className="text-gray-500 text-center text-lg font-medium flex flex-col gap-2 justify-center items-center">
                 <SearchX color="#475569" size={100} /> Blog Tidak Ditemukan
               </p>
@@ -138,25 +134,20 @@ export default function ExploreSection() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredBlogs.map((blog, i) => (
                   <Link
-                    href={`/blog-detail/${blog.title}`}
+                    href={`/blog-detail/${blog.slug}`}
                     key={blog.objectId}
                     aria-label="blog-card"
+                    className="h-full"
                   >
-                    <Card className="p-4 rounded-xl transition hover:shadow-lg text-left cursor-pointer min-h-85">
-                      <div className="flex flex-col gap-1">
-                        <div
-                          className="w-full h-40 rounded-md overflow-hidden mb-3 relative"
-                          style={{ width: "100%", height: "160px" }}
-                        >
+                    <Card className="p-4 rounded-3xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-[#18182b] text-left cursor-pointer h-full flex flex-col">
+                      <div className="flex flex-col gap-1 h-full">
+                        <div className="w-full h-48 rounded-lg overflow-hidden mb-4 relative">
                           <Image
                             src={blog.thumbnail}
                             alt={blog.title}
-                            width={800}
-                            height={300}
-                            priority={i === 0}
-                            fetchPriority={i === 0 ? "high" : "auto"}
-                            className="object-cover"
-                            style={{ width: "100%", height: "auto" }}
+                            fill
+                            priority={i < 3}
+                            className="object-cover transition-transform duration-500 hover:scale-105"
                           />
                         </div>
 
@@ -180,7 +171,7 @@ export default function ExploreSection() {
                           <div className="flex flex-col items-center justify-center">
                             <Calendar className="size-3" />
                           </div>
-                          {new Date(blog.created).toLocaleDateString("id-ID")}
+                          {new Date(blog.createdAt).toLocaleDateString("id-ID")}
                           <p>•</p>
                           <div className="flex flex-col items-center justify-center">
                             <User2 className="size-3" />

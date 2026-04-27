@@ -18,10 +18,9 @@ export const useAccountStore = create<IAccountStore>((set) => {
     account: null,
     setAccount: (account) => set({ account }),
 
-    signOut: () =>
-        set({
-          account: null, // if signed out, we set back the account and sign in history to blank (delete data from local Storage)
-          
-        }),
+    signOut: () => {
+      localStorage.removeItem("id");
+      set({ account: null });
+    },
   };
 });

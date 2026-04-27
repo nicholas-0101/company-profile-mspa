@@ -14,6 +14,9 @@ const DMSerif = DM_Serif_Display({
 export const metadata: Metadata = {
   title: "MS Putra Abadi",
   description: "Untuk bumi yang lebih baik.",
+  icons: {
+    icon: "/mspa-logo.webp",
+  },
 };
 
 export default function RootLayout({
