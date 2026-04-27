@@ -1,8 +1,26 @@
 "use client";
-import React, { Suspense } from "react";
+
+import React, { Suspense, useEffect } from "react";
 import Tab from "../coreComponents/tab-create";
+import { useAccountStore } from "@/lib/store/accountStore";
+import { useRouter } from "next/navigation";
 
 export default function WritePage() {
+  const account = useAccountStore((state) => state.account);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check localStorage first for a faster immediate redirect if not logged in at all
+    const id = localStorage.getItem("id");
+    if (!id && !account) {
+      router.push("/signin");
+    }
+  }, [account, router]);
+
+  // Optionally show nothing while checking auth or let it render if id exists
+  if (!account && typeof window !== "undefined" && !localStorage.getItem("id")) {
+    return null;
+  }
   return (
     <section className="min-h-screen bg-white pb-40">
       <div className="text-center mt-24 px-4">
