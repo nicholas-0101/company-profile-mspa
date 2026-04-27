@@ -7,7 +7,10 @@ function Footer() {
   const pathname = usePathname();
 
   // Hide footer on signin, signup, and create-blog pages
-  if (pathname === "/signin" || pathname === "/signup" || pathname === "/create-blog") {
+  const isAuthPage = pathname === "/signin" || pathname === "/signup";
+  const isCreatePage = pathname.startsWith("/create-blog");
+
+  if (isAuthPage || isCreatePage) {
     return null;
   }
 

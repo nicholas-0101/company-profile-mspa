@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Tab from "../coreComponents/tab-create";
 import { useAccountStore } from "@/lib/store/accountStore";
 import { useRouter } from "next/navigation";
@@ -8,17 +8,27 @@ import { useRouter } from "next/navigation";
 export default function WritePage() {
   const account = useAccountStore((state) => state.account);
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Check localStorage first for a faster immediate redirect if not logged in at all
-    const id = localStorage.getItem("id");
-    if (!id && !account) {
-      router.push("/signin");
-    }
-  }, [account, router]);
+    setMounted(true);
+  }, []);
 
-  // Optionally show nothing while checking auth or let it render if id exists
-  if (!account && typeof window !== "undefined" && !localStorage.getItem("id")) {
+  useEffect(() => {
+    if (mounted) {
+      const id = localStorage.getItem("id");
+      if (!id && !account) {
+        router.push("/signin");
+      }
+    }
+  }, [mounted, account, router]);
+
+  if (!mounted) {
+    return null;
+  }
+
+  // Final check to prevent content flash if definitely not logged in
+  if (!account && !localStorage.getItem("id")) {
     return null;
   }
   return (
