@@ -4,26 +4,33 @@ import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const slug = (await params).slug;
-  const blog = await prisma.blog.findUnique({
-    where: { slug },
-  });
+  try {
+    const slug = (await params).slug;
+    const blog = await prisma.blog.findUnique({
+      where: { slug },
+    });
 
-  if (!blog) return { title: "Blog Not Found" };
+    if (!blog) return { title: "Blog Not Found" };
 
-  return {
-    title: `${blog.title} | MS Putra Abadi`,
-    description: blog.content.substring(0, 160),
-    openGraph: {
-      title: blog.title,
+    return {
+      title: `${blog.title} | MS Putra Abadi`,
       description: blog.content.substring(0, 160),
-      images: [blog.thumbnail],
-    },
-  };
+      openGraph: {
+        title: blog.title,
+        description: blog.content.substring(0, 160),
+        images: [blog.thumbnail],
+      },
+    };
+  } catch (error) {
+    console.error("Metadata generation error:", error);
+    return { title: "MS Putra Abadi" };
+  }
 }
 
 interface IBlogDetailPageProps {
@@ -100,7 +107,7 @@ async function BlogDetailPage(props: IBlogDetailPageProps) {
             </div>
             <div className="flex items-center gap-2">
               <User2 className="size-4" />
-              <span className="text-sm font-medium">{detail.account.username}</span>
+              <span className="text-sm font-medium">{detail.account?.username || "Penulis"}</span>
             </div>
           </div>
         </div>
