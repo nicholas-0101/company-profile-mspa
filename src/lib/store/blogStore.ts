@@ -9,6 +9,7 @@ export interface BlogPost {
   thumbnail: string;
   content: string;
   categories: string;
+  published: boolean;
   createdAt: string;
   account: {
     username: string;
@@ -17,14 +18,19 @@ export interface BlogPost {
 
 interface BlogStore {
   blogs: BlogPost[];
-  fetchBlogs: () => Promise<void>;
+  editingBlog: BlogPost | null;
+  fetchBlogs: (accountId?: string) => Promise<void>;
+  setEditingBlog: (blog: BlogPost | null) => void;
 }
 
 export const useBlogStore = create<BlogStore>((set) => ({
   blogs: [],
-  fetchBlogs: async () => {
+  editingBlog: null,
+  setEditingBlog: (blog) => set({ editingBlog: blog }),
+  fetchBlogs: async (accountId?: string) => {
     try {
-      const res = await axios.get("/api/blogs");
+      const url = accountId ? `/api/blogs?accountId=${accountId}` : "/api/blogs";
+      const res = await axios.get(url);
       set({ blogs: res.data });
     } catch (err) {
       console.error("Error fetching blogs:", err);

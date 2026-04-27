@@ -1,6 +1,16 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
 
 function Footer() {
+  const pathname = usePathname();
+
+  // Hide footer on signin, signup, and create-blog pages
+  if (pathname === "/signin" || pathname === "/signup" || pathname === "/create-blog") {
+    return null;
+  }
+
   return (
     <footer className="bg-[#18182b] px-4 sm:px-10 lg:px-15 py-10 flex flex-col gap-8 text-white">
       <div className="text-left flex flex-col gap-6">

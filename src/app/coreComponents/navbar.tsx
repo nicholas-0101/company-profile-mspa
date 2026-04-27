@@ -2,14 +2,15 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Menu, X } from "lucide-react"; 
+import { Menu, X, PencilLine, Settings, LogOut } from "lucide-react"; 
 import axios from "axios";
 import { useAccountStore } from "@/lib/store/accountStore";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
 function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const account = useAccountStore((state) => state.account);
   const setAccount = useAccountStore((state) => state.setAccount);
   const signOut = useAccountStore((state) => state.signOut);
@@ -48,6 +49,11 @@ function Navbar() {
   useEffect(() => {
     keeplogin();
   }, []);
+
+  // Hide navbar on signin, signup, and create-blog pages
+  if (pathname === "/signin" || pathname === "/signup" || pathname === "/create-blog") {
+    return null;
+  }
 
   return (
     <>
@@ -116,17 +122,35 @@ function Navbar() {
                   </Button>
 
                   {menuOpen && (
-                    <div className="absolute right-0 mt-2 w-30 bg-white border border-gray-300 rounded-full z-50">
+                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 p-2 flex flex-col gap-1">
+                      <Link href="/create-blog?tab=create" onClick={() => setMenuOpen(false)}>
+                        <Button
+                          className="w-full justify-start rounded-xl px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 gap-2"
+                          variant="ghost"
+                        >
+                          <PencilLine className="size-4" /> Tulis Blog
+                        </Button>
+                      </Link>
+                      <Link href="/create-blog?tab=manage" onClick={() => setMenuOpen(false)}>
+                        <Button
+                          className="w-full justify-start rounded-xl px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 gap-2"
+                          variant="ghost"
+                        >
+                          <Settings className="size-4" /> Kelola Blog
+                        </Button>
+                      </Link>
+                      <div className="h-px bg-gray-100 my-1 mx-2" />
                       <Button
                         onClick={() => {
                           signOut();
                           setMenuOpen(false);
+                          router.push("/");
                         }}
-                        className="w-full text-left rounded-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 hover:text-red-500"
+                        className="w-full justify-start rounded-xl px-4 py-2 text-sm text-red-500 hover:bg-red-50 hover:text-red-600 gap-2"
                         variant="ghost"
                         aria-label="sign-out"
                       >
-                        Keluar
+                        <LogOut className="size-4" /> Keluar
                       </Button>
                     </div>
                   )}
@@ -164,7 +188,24 @@ function Navbar() {
                   <div className="flex items-center justify-between px-4 py-3 border-b">
                     <div className="flex flex-col gap-2">
                       {account?.email && (
-                        <p className="font-black">{`Halo, ${account?.username}`}</p>
+                        <>
+                          <p className="font-black mb-1">{`Halo, ${account?.username}`}</p>
+                          <Link
+                            href="/create-blog?tab=create"
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center gap-2 text-gray-600 font-medium hover:text-[#18182b]"
+                          >
+                            <PencilLine className="size-4" /> Tulis Blog
+                          </Link>
+                          <Link
+                            href="/create-blog?tab=manage"
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center gap-2 text-gray-600 font-medium hover:text-[#18182b] mb-2"
+                          >
+                            <Settings className="size-4" /> Kelola Blog
+                          </Link>
+                          <div className="h-px bg-gray-100 my-1 mb-2" />
+                        </>
                       )}
                       <Link
                         href="/"
@@ -203,12 +244,13 @@ function Navbar() {
                         onClick={() => {
                           signOut();
                           setIsOpen(false);
+                          router.push("/");
                         }}
-                        className="w-full text-left text-red-500 hover:bg-gray-100 hover:text-[#18182b]"
+                        className="w-full justify-start text-red-500 hover:bg-gray-100 hover:text-[#18182b] gap-2"
                         variant="ghost"
                         aria-label="sign-out"
                       >
-                        Keluar
+                        <LogOut className="size-4" /> Keluar
                       </Button>
                     ) : (
                       <div className="flex gap-2">

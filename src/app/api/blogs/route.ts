@@ -3,9 +3,20 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url);
+    const accountId = searchParams.get("accountId");
+
+    const where: any = {};
+    if (accountId) {
+      where.accountId = accountId;
+    } else {
+      where.published = true;
+    }
+
     const blogs = await prisma.blog.findMany({
+      where,
       include: {
         account: {
           select: { username: true }

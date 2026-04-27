@@ -24,6 +24,7 @@ model Blog {
   thumbnail  String
   content    String
   categories String
+  published  Boolean  @default(true)
   createdAt  DateTime @default(now())
 
   accountId String

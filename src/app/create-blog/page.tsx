@@ -10,7 +10,7 @@ export default function WritePage() {
           Tulis Blog
         </h1>
         <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-8">
-          Mulai menulis blog...
+          Mulai menulis atau mengelola blog...
         </p>
         <div className="w-full flex justify-center">
           <div className="w-[1016px]">
