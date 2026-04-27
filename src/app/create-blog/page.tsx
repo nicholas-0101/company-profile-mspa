@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import Tab from "../coreComponents/tab-create";
 
 export default function WritePage() {
@@ -14,7 +14,9 @@ export default function WritePage() {
         </p>
         <div className="w-full flex justify-center">
           <div className="w-[1016px]">
-            <Tab />
+            <Suspense fallback={<div className="h-40 flex items-center justify-center">Memuat...</div>}>
+              <Tab />
+            </Suspense>
           </div>
         </div>
       </div>
