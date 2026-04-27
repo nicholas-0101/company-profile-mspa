@@ -21,5 +21,5 @@ export function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/create-blog/:path*'],
+  matcher: ['/create-blog', '/create-blog/:path*'],
 }

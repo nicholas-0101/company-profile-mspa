@@ -39,10 +39,13 @@ function Navbar() {
         const result = await axios.get(`/api/auth/me?id=${id}`);
         if (result.data.user) {
           setAccount(result.data.user);
+        } else {
+          signOut();
         }
       }
     } catch (error) {
-      console.log(error);
+      console.log("Session invalid or stale, signing out...");
+      signOut();
     }
   };
 
