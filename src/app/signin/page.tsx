@@ -34,6 +34,10 @@ export default function SignIn() {
       if (result.data.user) {
         setAccount(result.data.user); // menyimpan data ke global state zustand
         localStorage.setItem("id", result.data.user.objectId); // menyimpan data id ke localStorage untuk nanti keeplogin
+        
+        // Set cookie for middleware auth check
+        document.cookie = `id=${result.data.user.objectId}; path=/; max-age=604800`; // 7 days
+        
         router.replace("/");
       }
     } catch (error) {
